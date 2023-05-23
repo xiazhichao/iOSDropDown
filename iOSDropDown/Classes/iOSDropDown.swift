@@ -52,6 +52,7 @@ open class DropDown: UITextField {
     }
 
     // Variables
+//    fileprivate var rightCellView: UIView = UIView()
     fileprivate var tableheightX: CGFloat = 100
     fileprivate var dataArray = [String]()
     fileprivate var imageArray = [String]()
@@ -71,6 +72,7 @@ open class DropDown: UITextField {
             imageArray = optionImageArray
         }
     }
+    public var accessoryImage: UIImage?
 
     public var optionIds: [Int]?
     var searchText = String() {
@@ -414,7 +416,20 @@ extension DropDown: UITableViewDataSource {
         cell!.textLabel!.text = "\(dataArray[indexPath.row])"
         cell!.textLabel!.textColor = itemsColor
         cell!.tintColor = itemsTintColor
-        cell!.accessoryType = (indexPath.row == selectedIndex) && checkMarkEnabled ? .checkmark : .none
+        if(indexPath.row == selectedIndex) {
+            if(checkMarkEnabled) {
+                if let accessoryImage = accessoryImage {
+                    let imageView = UIImageView(image: accessoryImage)
+                    imageView.backgroundColor = .white
+                    imageView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+                    cell!.accessoryView = imageView
+                } else {
+                    cell!.accessoryType = .checkmark
+                }
+            } else {
+                cell!.accessoryType = .none
+            }
+        }
         cell!.selectionStyle = .none
         cell?.textLabel?.font = font
         cell?.textLabel?.textAlignment = textAlignment
