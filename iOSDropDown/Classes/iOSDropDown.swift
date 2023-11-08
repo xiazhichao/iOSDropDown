@@ -207,12 +207,16 @@ open class DropDown: UITextField {
     }
 
     public func showList() {
+        var parentView: UIView? = UIApplication.shared.windows.first
         if parentController == nil {
             parentController = parentViewController
+            if parentController != nil {
+                parentView = parentController?.view
+            }
         }
-        backgroundView.frame = parentController?.view.frame ?? backgroundView.frame
-        pointToParent = getConvertedPoint(self, baseView: parentController?.view)
-        parentController?.view.insertSubview(backgroundView, aboveSubview: self)
+        backgroundView.frame = parentView?.frame ?? backgroundView.frame
+        pointToParent = getConvertedPoint(self, baseView: parentView)
+        parentView?.insertSubview(backgroundView, aboveSubview: self)
         TableWillAppearCompletion()
         if listHeight > rowHeight * CGFloat(dataArray.count) {
             tableheightX = rowHeight * CGFloat(dataArray.count)
@@ -233,10 +237,10 @@ open class DropDown: UITextField {
         table.layer.cornerRadius = 3
         table.backgroundColor = rowBackgroundColor
         table.rowHeight = rowHeight
-        parentController?.view.addSubview(shadow)
-        parentController?.view.addSubview(table)
+        parentView?.addSubview(shadow)
+        parentView?.addSubview(table)
         isSelected = true
-        let height = (parentController?.view.frame.height ?? 0) - (pointToParent.y + frame.height + 5)
+        let height = (parentView?.frame.height ?? 0) - (pointToParent.y + frame.height + 5)
         var y = pointToParent.y + frame.height + 5
         if height < (keyboardHeight + tableheightX) {
             y = pointToParent.y - tableheightX
@@ -300,7 +304,11 @@ open class DropDown: UITextField {
         } else {
             tableheightX = listHeight
         }
-        let height = (parentController?.view.frame.height ?? 0) - (pointToParent.y + frame.height + 5)
+        var parentView: UIView? = UIApplication.shared.windows.first
+        if parentController != nil {
+            parentView = parentController?.view
+        }
+        let height = (parentView?.frame.height ?? 0) - (pointToParent.y + frame.height + 5)
         var y = pointToParent.y + frame.height + 5
         if height < (keyboardHeight + tableheightX) {
             y = pointToParent.y - tableheightX
